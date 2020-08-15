@@ -4,14 +4,16 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/product-controller')
 
-// Buscar items
+// Buscar todos os itens
 router.get('/', controller.get)
-// Buscar items
+// Busca no Banco po ID
+router.get('/admin/:id', controller.getById);
+// Buscar items pelo Slug
 router.get('/:slug', controller.getBySlug)
-// Postagem
+// Grava no banco de dados
 router.post('/', controller.post);
-// Alteração
+// Altera 
 router.put('/:id', controller.put);
-// Deletar post
+// Deleta
 router.delete('/', controller.delete);
 module.exports = router;
