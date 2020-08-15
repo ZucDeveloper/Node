@@ -4,54 +4,52 @@ const Product = mongoose.model('Product');
 
 // Busca os item do banco de dados
 exports.get = (req, res, next) => {
-  // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e o segundo parametro indica os campos que voce quer trazer da database
   Product.find({ active: true }, 'title price slug')
-  // resultado
-  .then(data => {
-    res.status(200).send(data);
-  }).catch(e => {
-    res.status(400).send(e);
-  });
+    // resultado
+    .then(data => {
+      res.status(200).send(data);
+    }).catch(e => {
+      res.status(400).send(e);
+    });
 }
 // Busca no banco de dados por Slug no final da url
 exports.getBySlug = (req, res, next) => {
   // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e trago todos os campos exceto o active.
-  Product.findOne({ 
+  Product.findOne({
     slug: req.params.slug,
-    active: true 
+    active: true
   }, 'title description price slug tags')
-  // resultado
-  .then(data => {
-    res.status(200).send(data);
-  }).catch(e => {
-    res.status(400).send(e);
-  });
+    // resultado
+    .then(data => {
+      res.status(200).send(data);
+    }).catch(e => {
+      res.status(400).send(e);
+    });
 }
 // Busca pelo ID do produto na URL
 exports.getById = (req, res, next) => {
-  // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e trago todos os campos exceto o active.
   Product.findById(req.params.id)
-  // resultado
-  .then(data => {
-    res.status(200).send(data);
-  }).catch(e => {
-    res.status(400).send(e);
-  });
+    // resultado
+    .then(data => {
+      res.status(200).send(data);
+    }).catch(e => {
+      res.status(400).send(e);
+    });
 }
 // Busca por Tag dos produtos
 exports.getByTag = (req, res, next) => {
- // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e trago todos os campos exceto o active.
- Product.find({ 
-   tags: req.params.tag,
-   active: true
-}, 'title description price slug tags')
- // resultado
- .then(data => {
-   res.status(200).send(data);
- }).catch(e => {
-   res.status(400).send(e);
- });
+  Product.find({
+    tags: req.params.tag,
+    active: true
+  }, 'title description price slug tags')
+    // resultado
+    .then(data => {
+      res.status(200).send(data);
+    }).catch(e => {
+      res.status(400).send(e);
+    });
 }
+
 // Posta os itens no banco de dados
 exports.post = (req, res, next) => {
   var product = new Product(req.body);
@@ -66,13 +64,26 @@ exports.post = (req, res, next) => {
     });
 
 };
-
+// Atualizar um produto
 exports.put = (req, res, next) => {
-  let id = req.params.id;
-  res.status(200).send({
-    id: id,
-    item: req.body
-  });
+  Product
+    .findByIdAndUpdate(req.params.id, {
+      $set: {
+        title: req.body.title,
+        description: req.body.description,
+        price: req.body.price,
+        slug: req.body.slug
+      }
+    }).then(x => {
+      res.status(201).send({
+        message: 'Produto atualizado com sucesso!'
+      });
+    }).catch(e => {
+      res.status(400).send({
+        message: 'Falha ao atualizar produto',
+        data: e
+      });
+    });
 };
 
 exports.delete = (req, res, next) => {
