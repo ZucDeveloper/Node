@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 server.listen(port);
 server.on('err', onError);
-server.log('API rodando na porta ' + port);
+// server.log('API rodando na porta ' + port);
 
 console.log('API rodando na porta ' + port);
 
