@@ -6,6 +6,8 @@ const controller = require('../controllers/product-controller')
 
 // Buscar items
 router.get('/', controller.get)
+// Buscar items
+router.get('/:slug', controller.getBySlug)
 // Postagem
 router.post('/', controller.post);
 // Alteração
