@@ -2,11 +2,12 @@
 const mongoose = require('mongoose');
 const ValidationContract = require('../validators/fluentValidator');
 const Product = mongoose.model('Product');
-
+const repository = require('../repositories/productsRepository')
 
 // Busca os item do banco de dados
 exports.get = (req, res, next) => {
-  Product.find({ active: true }, 'title price slug')
+  repository
+    .get()
     // resultado
     .then(data => {
       res.status(200).send(data);
@@ -16,11 +17,8 @@ exports.get = (req, res, next) => {
 }
 // Busca no banco de dados por Slug no final da url
 exports.getBySlug = (req, res, next) => {
-  // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e trago todos os campos exceto o active.
-  Product.findOne({
-    slug: req.params.slug,
-    active: true
-  }, 'title description price slug tags')
+  repository
+    .getBySlug(req.params.slug)
     // resultado
     .then(data => {
       res.status(200).send(data);
@@ -30,7 +28,8 @@ exports.getBySlug = (req, res, next) => {
 }
 // Busca pelo ID do produto na URL
 exports.getById = (req, res, next) => {
-  Product.findById(req.params.id)
+  repository
+    .getById(req.params.id)
     // resultado
     .then(data => {
       res.status(200).send(data);
@@ -40,10 +39,8 @@ exports.getById = (req, res, next) => {
 }
 // Busca por Tag dos produtos
 exports.getByTag = (req, res, next) => {
-  Product.find({
-    tags: req.params.tag,
-    active: true
-  }, 'title description price slug tags')
+  repository
+    .getByTag(req.params.tags)
     // resultado
     .then(data => {
       res.status(200).send(data);
@@ -54,9 +51,9 @@ exports.getByTag = (req, res, next) => {
 // Posta os itens no banco de dados
 exports.post = (req, res, next) => {
   let contract = new ValidationContract();
-  contract.hasMinLen(req.body.title,3 , 'O título deve conter pelo menos 3 caracteres')
-  contract.hasMinLen(req.body.slug,3 , 'O slug deve conter pelo menos 3 caracteres')
-  contract.hasMinLen(req.body.description,3 , 'A description deve conter pelo menos 3 caracteres')
+  contract.hasMinLen(req.body.title, 3, 'O título deve conter pelo menos 3 caracteres')
+  contract.hasMinLen(req.body.slug, 3, 'O slug deve conter pelo menos 3 caracteres')
+  contract.hasMinLen(req.body.description, 3, 'A description deve conter pelo menos 3 caracteres')
 
   // Se os dados forem invalidos
   if (!contract.isValid()) {
@@ -64,8 +61,8 @@ exports.post = (req, res, next) => {
     return;
   }
 
-  var product = new Product(req.body);
-  product.save()
+  repository
+    .create(req.body)
     .then(x => {
       res.status(201).send({ message: 'Produto cadastrado com sucesso!' });
     }).catch(e => {
@@ -78,15 +75,9 @@ exports.post = (req, res, next) => {
 };
 // Atualizar um produto
 exports.put = (req, res, next) => {
-  Product
-    .findByIdAndUpdate(req.params.id, {
-      $set: {
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        slug: req.body.slug
-      }
-    }).then(x => {
+  repository
+    .upDate(req.params.id, req.body)
+    .then(x => {
       res.status(201).send({
         message: 'Produto atualizado com sucesso!'
       });
@@ -98,8 +89,8 @@ exports.put = (req, res, next) => {
     });
 };
 exports.delete = (req, res, next) => {
-  Product
-    .findOneAndRemove(req.body.id)
+  repository
+    .delete(req.body.id)
     .then(x => {
       res.status(200).send({
         message: 'Produto removido com sucesso!'
