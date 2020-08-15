@@ -17,5 +17,5 @@ router.post('/', controller.post);
 // Altera 
 router.put('/:id', controller.put);
 // Deleta
-router.delete('/', controller.delete);
+router.delete('/:id', controller.delete);
 module.exports = router;
