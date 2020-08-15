@@ -1,6 +1,8 @@
 'use estrict';
 const mongoose = require('mongoose');
+const ValidationContract = require('../validators/fluentValidator');
 const Product = mongoose.model('Product');
+
 
 // Busca os item do banco de dados
 exports.get = (req, res, next) => {
@@ -49,9 +51,19 @@ exports.getByTag = (req, res, next) => {
       res.status(400).send(e);
     });
 }
-
 // Posta os itens no banco de dados
 exports.post = (req, res, next) => {
+  let contract = new ValidationContract();
+  contract.hasMinLen(req.body.title,3 , 'O título deve conter pelo menos 3 caracteres')
+  contract.hasMinLen(req.body.slug,3 , 'O slug deve conter pelo menos 3 caracteres')
+  contract.hasMinLen(req.body.description,3 , 'A description deve conter pelo menos 3 caracteres')
+
+  // Se os dados forem invalidos
+  if (!contract.isValid()) {
+    res.status(400).send(contract.errors()).end();
+    return;
+  }
+
   var product = new Product(req.body);
   product.save()
     .then(x => {
@@ -85,7 +97,6 @@ exports.put = (req, res, next) => {
       });
     });
 };
-
 exports.delete = (req, res, next) => {
   Product
     .findOneAndRemove(req.body.id)
