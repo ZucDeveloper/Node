@@ -38,6 +38,20 @@ exports.getById = (req, res, next) => {
     res.status(400).send(e);
   });
 }
+// Busca por Tag dos produtos
+exports.getByTag = (req, res, next) => {
+ // .find Busca todos os produtos, no primeiro parametro trago apenas os produtos com o active true, e trago todos os campos exceto o active.
+ Product.find({ 
+   tags: req.params.tag,
+   active: true
+}, 'title description price slug tags')
+ // resultado
+ .then(data => {
+   res.status(200).send(data);
+ }).catch(e => {
+   res.status(400).send(e);
+ });
+}
 // Posta os itens no banco de dados
 exports.post = (req, res, next) => {
   var product = new Product(req.body);
