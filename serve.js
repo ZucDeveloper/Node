@@ -22,8 +22,18 @@ const route = router.get('/', (req, res, next) => {
 app.use('/', route);
 
 server.listen(port);
-server.on('error', onError);
+server.on('err', onError);
+server.log('API rodando na porta ' + port);
+
 console.log('API rodando na porta ' + port);
+
+function onListening() {
+  const addr =server.address();
+  const bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+}
 
 function normalizePort(val) {
   const port = parseInt(val, 10);
