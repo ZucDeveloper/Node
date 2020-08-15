@@ -9,7 +9,11 @@ const router = express.Router();
 
 // Conecta com o banco de dados
 
-mongoose.connect ("mongodb+srv://flamengo110493:flamengo110493@meudb.rifzw.mongodb.net/MeuDb?retryWrites=true&w=majority", {useNewUrlParser: true} )
+mongoose.connect ("mongodb+srv://flamengo110493:flamengo110493@meudb.rifzw.mongodb.net/MeuDb?retryWrites=true&w=majority", {useNewUrlParser: true} );
+
+// Carrega os Models
+const product = require('./models/product');
+
 // Carrega as Rotas
 const indexRoute = require('./routes/index-route');
 const productsRoute = require('./routes/product-route');

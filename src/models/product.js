@@ -1,9 +1,9 @@
 'use strict'
 
-const mongoose = require('mongose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const Schema = new Schema({
+const schema = new Schema({
   // Schema cria um Id de cada produto dinamicamente
   // Titulo tipo string, 
   title: {
@@ -13,7 +13,7 @@ const Schema = new Schema({
   },
   slug: {
     type:String,
-    required: true,
+    required: [true, 'O Slug é obrigatório'],
     trim: true,
     index: true,
     unique: true
