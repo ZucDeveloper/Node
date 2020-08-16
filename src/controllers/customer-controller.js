@@ -1,7 +1,8 @@
 'use estrict';
 
 const ValidationContract = require('../validators/fluentValidator');
-const customers = require('../repositories/customersRepository')
+const customers = require('../repositories/customersRepository');
+const md5 = require('md5');
 
 // Posta os itens no banco de dados
 exports.post = async (req, res, next) => {
@@ -18,7 +19,11 @@ exports.post = async (req, res, next) => {
   }
 
   try {
-    await customers.create(req.body);
+    await customers.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: md5(req.body.password + global.SALT_KEY)
+    });
     res.status(201).send({ message: 'Cliente cadastrado com sucesso!' });
   } catch (e) {
     res.status(400).send({
