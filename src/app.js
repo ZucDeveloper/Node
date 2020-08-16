@@ -11,7 +11,8 @@ const router = express.Router();
 mongoose.connect ("mongodb+srv://flamengo110493:flamengo110493@meudb.rifzw.mongodb.net/MeuDb?retryWrites=true&w=majority", {useNewUrlParser: true} );
 
 // Carrega os Models
-const product = require('./models/product');
+const Product = require('./models/product');
+const Customer = require('./models/customer')
 
 // Carrega as Rotas
 const indexRoute = require('./routes/index-route');
