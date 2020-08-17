@@ -2,6 +2,8 @@
 
 const ValidationContract = require('../validators/fluentValidator');
 const repository = require('../repositories/productsRepository')
+const guid = require('guid');
+const upClound = require('../services/upClound')
 
 
 // Busca os item do banco de dados
@@ -63,10 +65,23 @@ exports.post = async (req, res, next) => {
     return;
   }
 
-  try {
-    await repository.create(req.body);
+  try {    
+    let fileName = guid.raw().toString();
+    var dataURI = req.body.image;
+    //  enviando foto para o Cloundnary
+    await upClound.upProduct(dataURI, fileName, 'storage');    
+    await repository.create({
+      title: req.body.title,
+      slug: req.body.slug,
+      description: req.body.description,
+      price: req.body.price,
+      active: true,
+      tags: req.body.tags,
+      image: `http://res.cloudinary.com/zucdeveloper/image/upload/v1597637875/storage/${fileName}.jpg` 
+    });
     res.status(201).send({ message: 'Produto cadastrado com sucesso!' });
   } catch (e) {
+    console.log(e)
     res.status(400).send({
       message: 'Falha ao processar sua requisição'
     });
@@ -99,7 +114,7 @@ exports.delete = async (req, res, next) => {
 };
 
 // Função de retorno de error caso o ID nao seja informado no bady na função delete acima
-const error = () => {  
+const error = () => {
   res.status(400).send({
     message: 'Falha ao processar sua requisição'
   });

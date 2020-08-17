@@ -5,5 +5,9 @@ module.exports = {
   connectionString:"mongodb+srv://flamengo110493:flamengo110493@meudb.rifzw.mongodb.net/MeuDb?retryWrites=true&w=majority",
   // Chave da api do sendGrid.com 
   sendgridkey: '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',
-  containerConnectionString: 'TDB'
+  containerConnectionString: {
+    cloundName: "zucdeveloper",
+    apiKey: "166364431743656",
+    apiSecret: "hqgeNNU4-CN2WrohR9QydAyMXLk"
+  }
 }
