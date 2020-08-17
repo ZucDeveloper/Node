@@ -14,9 +14,9 @@ router.get('/:slug', controller.getBySlug)
 // Busca produtos por tag
 router.get('/tags/:tag', controller.getByTag)
 // Grava no banco de dados
-router.post('/', authService.authorize, controller.post);
+router.post('/', authService.isAdmin, controller.post);
 // Altera 
-router.put('/:id', authService.authorize, controller.put);
+router.put('/:id', authService.isAdmin, controller.put);
 // Deleta
-router.delete('/:id', authService.authorize, controller.delete);
+router.delete('/:id', authService.isAdmin, controller.delete);
 module.exports = router;
