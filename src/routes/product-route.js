@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/product-controller')
+const authService = require('../services/authService');
 
 // Buscar todos os itens
 router.get('/', controller.get)
@@ -13,9 +14,9 @@ router.get('/:slug', controller.getBySlug)
 // Busca produtos por tag
 router.get('/tags/:tag', controller.getByTag)
 // Grava no banco de dados
-router.post('/', controller.post);
+router.post('/', authService.authorize, controller.post);
 // Altera 
-router.put('/:id', controller.put);
+router.put('/:id', authService.authorize, controller.put);
 // Deleta
-router.delete('/:id', controller.delete);
+router.delete('/:id', authService.authorize, controller.delete);
 module.exports = router;
