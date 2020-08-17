@@ -22,8 +22,18 @@ const customerRoute = require('./routes/customer-route');
 const orderRoute = require('./routes/order-route')
 
 // Midleware para transformar JSON
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '5mb'
+}));
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Habilita o CORS
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers','Origin, x-Requested-with, Content-Type, Accept, x-accedd-token');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+})
+
 
 // direciona as Rotas
 app.use('/', indexRoute);
