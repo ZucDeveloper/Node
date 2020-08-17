@@ -8,7 +8,12 @@ const app = express();
 const router = express.Router();
 
 // Conecta com o banco de dados
-mongoose.connect (config.connectionString);
+mongoose.set('useCreateIndex', true);
+mongoose.connect (config.connectionString, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
 
 // Carrega os Models
 const Product = require('./models/product');
